@@ -1,35 +1,26 @@
 package com.lx.utils.ImageUtils;
 
+import sun.font.FontDesignMetrics;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawImages<T> {
+public class DrawImages {
 
     /**
      * 每个元素边框的宽度
      */
-    private static final int ELEMENT_FRAME_WIDTH = 45;
+    private static final int ELEMENT_FRAME_WIDTH = 100;
 
     /**
      * 每个元素边框的长度
      */
-    private static final int ELEMENT_FRAME_HEIGHT = 45;
-
-    /**
-     * 每个元素的宽度
-     */
-    private static final int ELEMENT_WIDTH = 8;
-
-    /**
-     * 每个元素的长度
-     */
-    private static final int ELEMENT_HEIGHT = 23;
+    private static final int ELEMENT_FRAME_HEIGHT = 100;
 
     /**
      * 首尾元素距离边框的宽度
@@ -51,57 +42,59 @@ public class DrawImages<T> {
         list.add(123456);
         list.add(1234567);
         list.add(12345678);
-        DrawImages.draw(list);
+        list.add(123456789);
+        list.add(1234567890);
+        DrawImages.draw(list, "1");
+
+//        List<String> list1 = new ArrayList<>();
+//        list1.add("a");
+//        list1.add("b");
+//        list1.add("c");
+//        list1.add("aasdasda");
+//        list1.add("aqwedasd");
+//        list1.add("aqweqwe");
+//        list1.add("aqwe");
+//        list1.add("aqwe");
+//        list1.add("aqwe");
+//        DrawImages.draw(list1);
+
     }
 
     /**
-     * 绘制数组中的内容
+     * 绘制数组中的内容，并得到图片
      */
-    public static <T> void draw(List<T> list) throws IOException {
-
-
-        int elementMaxLen = getElementMaxLen(list);
-        System.out.println(elementMaxLen);
+    public static <T> void draw(List<T> list, String imageName) throws IOException {
 
         // 数组长度
         int size = list.size();
-        int frameW = size * ELEMENT_FRAME_WIDTH * elementMaxLen + 2 * FRAME_WIDTH;
-        int frameH = ELEMENT_FRAME_HEIGHT * elementMaxLen + 2 * FRAME_HEIGHT;
-
+        // 画板的总宽度
+        int frameW = size * ELEMENT_FRAME_WIDTH + 2 * FRAME_WIDTH;
+        // 画板的总高度
+        int frameH = ELEMENT_FRAME_HEIGHT + 2 * FRAME_HEIGHT;
 
         // 得到图片缓冲区
         BufferedImage bi = new BufferedImage(frameW, frameH, BufferedImage.TYPE_INT_RGB);
+
         // 得到它的绘制环境(这张图片的笔)
         Graphics2D g2 = (Graphics2D) bi.getGraphics();
-        g2.setColor(Color.WHITE); // 设置背景颜色
-        g2.fillRect(0, 0, frameW, frameH);// 填充整张图片(其实就是设置背景颜色)
-        g2.setColor(Color.black);// 设置字体颜色
-        g2.setStroke(new BasicStroke(2.0f)); // 边框加粗
-        g2.drawRect(1, 1, frameW - 2, frameH - 2); // 画边框就是黑边框
 
-        // 画上下两条横线
-        drawRowLine(g2, list.size(), elementMaxLen);
+        // 设置Graphics2D对象g2的参数
+        setGraphicsParam(g2, frameW, frameH);
 
-        // 画元素之间的竖线
-        drawColumnLine(g2, list.size() + 1, elementMaxLen);
+        // 绘制画板列表的上下两条横线
+        drawRowLine(g2, size);
 
-        setElementFront(g2);
+        // 绘制画板列表元素之间的竖线
+        drawColumnLine(g2, size + 1);
 
-        for (int i = 0; i < list.size(); i++) {
-            drawElement(g2, list.get(i), i);
-        }
+        // 填充列表元素
+        drawElement(g2, list);
 
-//        g2.drawString(String.valueOf(list.get(0)), leftW + ELEMENT_WIDTH, bottomH - ELEMENT_HEIGHT);
-//
-//
-//        g2.drawString(String.valueOf(list.get(1)), leftW + 1 * ELEMENT_FRAME_WIDTH + ELEMENT_WIDTH, bottomH - ELEMENT_HEIGHT);
-//
-//
-//        g2.drawString(String.valueOf(list.get(2)), leftW + 2 * ELEMENT_FRAME_WIDTH + ELEMENT_WIDTH, bottomH - ELEMENT_HEIGHT);
+        // 释放对象
+        g2.dispose();
 
-
-        g2.dispose(); // 释放对象
-        ImageIO.write(bi, "JPEG", new FileOutputStream("./a.jpg"));// 保存图片 JPEG表示保存格式
+        // 保存图片
+        ImageIO.write(bi, "png", new FileOutputStream("./" + imageName + ".png"));
     }
 
     /**
@@ -123,18 +116,23 @@ public class DrawImages<T> {
         return maxLen;
     }
 
-    private static <T> void drawElement(Graphics2D g2, T element, int index) {
-        g2.drawString(String.valueOf(element), FRAME_WIDTH + (index * ELEMENT_FRAME_WIDTH) + ELEMENT_WIDTH, ELEMENT_HEIGHT + FRAME_HEIGHT + g2.getFont().getSize());
+    private static <T> void drawElement(Graphics2D g2, List<T> list) {
+        int fontSize = g2.getFont().getSize();
+        FontDesignMetrics metrics = FontDesignMetrics.getMetrics(g2.getFont());
+        for (int index = 0; index < list.size(); index++) {
+            String content = String.valueOf(list.get(index));
+            g2.drawString(content, FRAME_WIDTH + (index * ELEMENT_FRAME_WIDTH) + (ELEMENT_FRAME_WIDTH / 2) - (fontSize / 2 * content.length() / 2), FRAME_HEIGHT + ELEMENT_FRAME_HEIGHT / 2 - fontSize / 2 + metrics.getAscent());
+        }
     }
 
-    private static void setElementFront(Graphics2D g2) {
-        AffineTransform affineTransform = new AffineTransform();
-        affineTransform.scale(1d, 3d);
-
-        // create font using that transform
-        Font stretchedFont = g2.getFont().deriveFont(affineTransform);
-
-        g2.setFont(stretchedFont);
+    private static void setGraphicsParam(Graphics2D g2, int frameW, int frameH) {
+        g2.setColor(Color.WHITE); // 设置背景颜色
+        g2.fillRect(0, 0, frameW, frameH);// 填充整张图片(其实就是设置背景颜色)
+        g2.setColor(Color.black);// 设置字体颜色
+        g2.setStroke(new BasicStroke(2.0f)); // 边框加粗
+        g2.drawRect(1, 1, frameW - 2, frameH - 2); // 画边框就是黑边框
+        Font font = new Font("Times New Roman", Font.BOLD, 20);
+        g2.setFont(font);
     }
 
     /**
@@ -142,9 +140,9 @@ public class DrawImages<T> {
      *
      * @param size 需要绘制元素的总数
      */
-    private static void drawRowLine(Graphics2D g2, int size, int maxElementLen) {
+    private static void drawRowLine(Graphics2D g2, int size) {
         g2.drawLine(FRAME_WIDTH, FRAME_HEIGHT, size * ELEMENT_FRAME_WIDTH + FRAME_WIDTH, FRAME_HEIGHT);
-        g2.drawLine(FRAME_WIDTH, ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT, size * ELEMENT_FRAME_WIDTH * maxElementLen + FRAME_WIDTH, ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT);
+        g2.drawLine(FRAME_WIDTH, ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT, size * ELEMENT_FRAME_WIDTH + FRAME_WIDTH, ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT);
     }
 
     /**
@@ -152,9 +150,9 @@ public class DrawImages<T> {
      *
      * @param index 需要绘制的条数（元素总数 + 1）
      */
-    private static void drawColumnLine(Graphics2D g2, int index, int maxElementLen) {
+    private static void drawColumnLine(Graphics2D g2, int index) {
         for (int i = 0; i < index; i++) {
-            g2.drawLine(FRAME_WIDTH + (i * ELEMENT_FRAME_WIDTH), FRAME_HEIGHT, FRAME_WIDTH + (i * ELEMENT_FRAME_WIDTH * maxElementLen), ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT);
+            g2.drawLine(FRAME_WIDTH + (i * ELEMENT_FRAME_WIDTH), FRAME_HEIGHT, FRAME_WIDTH + (i * ELEMENT_FRAME_WIDTH), ELEMENT_FRAME_HEIGHT + FRAME_HEIGHT);
         }
     }
 
