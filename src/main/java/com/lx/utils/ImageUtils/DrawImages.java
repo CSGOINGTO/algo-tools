@@ -13,22 +13,22 @@ import java.util.List;
 public class DrawImages {
 
     /**
-     * Ã¿¸öÔªËØ±ß¿òµÄ¿í¶È
+     * æ¯ä¸ªå…ƒç´ è¾¹æ¡†çš„å®½åº¦
      */
     private static final int ELEMENT_FRAME_WIDTH = 100;
 
     /**
-     * Ã¿¸öÔªËØ±ß¿òµÄ³¤¶È
+     * æ¯ä¸ªå…ƒç´ è¾¹æ¡†çš„é•¿åº¦
      */
     private static final int ELEMENT_FRAME_HEIGHT = 100;
 
     /**
-     * Ê×Î²ÔªËØ¾àÀë±ß¿òµÄ¿í¶È
+     * é¦–å°¾å…ƒç´ è·ç¦»è¾¹æ¡†çš„å®½åº¦
      */
     private static final int FRAME_WIDTH = 20;
 
     /**
-     * Ê×Î²ÔªËØ¾àÀë±ß¿òµÄ¸ß¶È
+     * é¦–å°¾å…ƒç´ è·ç¦»è¾¹æ¡†çš„é«˜åº¦
      */
     private static final int FRAME_HEIGHT = 10;
 
@@ -61,51 +61,51 @@ public class DrawImages {
     }
 
     /**
-     * »æÖÆÊı×éÖĞµÄÄÚÈİ£¬²¢µÃµ½Í¼Æ¬
+     * ç»˜åˆ¶æ•°ç»„ä¸­çš„å†…å®¹ï¼Œå¹¶å¾—åˆ°å›¾ç‰‡
      */
     public static <T> void draw(List<T> list, String imageName) throws IOException {
 
-        // Êı×é³¤¶È
+        // æ•°ç»„é•¿åº¦
         int size = list.size();
-        // »­°åµÄ×Ü¿í¶È
+        // ç”»æ¿çš„æ€»å®½åº¦
         int frameW = size * ELEMENT_FRAME_WIDTH + 2 * FRAME_WIDTH;
-        // »­°åµÄ×Ü¸ß¶È
+        // ç”»æ¿çš„æ€»é«˜åº¦
         int frameH = ELEMENT_FRAME_HEIGHT + 2 * FRAME_HEIGHT;
 
-        // µÃµ½Í¼Æ¬»º³åÇø
+        // å¾—åˆ°å›¾ç‰‡ç¼“å†²åŒº
         BufferedImage bi = new BufferedImage(frameW, frameH, BufferedImage.TYPE_INT_RGB);
 
-        // µÃµ½ËüµÄ»æÖÆ»·¾³(ÕâÕÅÍ¼Æ¬µÄ±Ê)
+        // å¾—åˆ°å®ƒçš„ç»˜åˆ¶ç¯å¢ƒ(è¿™å¼ å›¾ç‰‡çš„ç¬”)
         Graphics2D g2 = (Graphics2D) bi.getGraphics();
 
-        // ÉèÖÃGraphics2D¶ÔÏóg2µÄ²ÎÊı
+        // è®¾ç½®Graphics2Då¯¹è±¡g2çš„å‚æ•°
         setGraphicsParam(g2, frameW, frameH);
 
-        // »æÖÆ»­°åÁĞ±íµÄÉÏÏÂÁ½ÌõºáÏß
+        // ç»˜åˆ¶ç”»æ¿åˆ—è¡¨çš„ä¸Šä¸‹ä¸¤æ¡æ¨ªçº¿
         drawRowLine(g2, size);
 
-        // »æÖÆ»­°åÁĞ±íÔªËØÖ®¼äµÄÊúÏß
+        // ç»˜åˆ¶ç”»æ¿åˆ—è¡¨å…ƒç´ ä¹‹é—´çš„ç«–çº¿
         drawColumnLine(g2, size + 1);
 
-        // Ìî³äÁĞ±íÔªËØ
+        // å¡«å……åˆ—è¡¨å…ƒç´ 
         drawElement(g2, list);
 
-        // ÊÍ·Å¶ÔÏó
+        // é‡Šæ”¾å¯¹è±¡
         g2.dispose();
 
-        // ±£´æÍ¼Æ¬
+        // ä¿å­˜å›¾ç‰‡
         ImageIO.write(bi, "png", new FileOutputStream("./" + imageName + ".png"));
     }
 
     /**
-     * »ñÈ¡ÔªËØ³¤¶È
+     * è·å–å…ƒç´ é•¿åº¦
      */
     private static <T> int getElementLen(T element) {
         return element == null ? 0 : String.valueOf(element).length();
     }
 
     /**
-     * »ñÈ¡ÁĞ±íÖĞ×î´óµÄÔªËØ³¤¶È
+     * è·å–åˆ—è¡¨ä¸­æœ€å¤§çš„å…ƒç´ é•¿åº¦
      */
     private static <T> int getElementMaxLen(List<T> list) {
         int maxLen = 0;
@@ -126,19 +126,19 @@ public class DrawImages {
     }
 
     private static void setGraphicsParam(Graphics2D g2, int frameW, int frameH) {
-        g2.setColor(Color.WHITE); // ÉèÖÃ±³¾°ÑÕÉ«
-        g2.fillRect(0, 0, frameW, frameH);// Ìî³äÕûÕÅÍ¼Æ¬(ÆäÊµ¾ÍÊÇÉèÖÃ±³¾°ÑÕÉ«)
-        g2.setColor(Color.black);// ÉèÖÃ×ÖÌåÑÕÉ«
-        g2.setStroke(new BasicStroke(2.0f)); // ±ß¿ò¼Ó´Ö
-        g2.drawRect(1, 1, frameW - 2, frameH - 2); // »­±ß¿ò¾ÍÊÇºÚ±ß¿ò
+        g2.setColor(Color.WHITE); // è®¾ç½®èƒŒæ™¯é¢œè‰²
+        g2.fillRect(0, 0, frameW, frameH);// å¡«å……æ•´å¼ å›¾ç‰‡(å…¶å®å°±æ˜¯è®¾ç½®èƒŒæ™¯é¢œè‰²)
+        g2.setColor(Color.black);// è®¾ç½®å­—ä½“é¢œè‰²
+        g2.setStroke(new BasicStroke(2.0f)); // è¾¹æ¡†åŠ ç²—
+        g2.drawRect(1, 1, frameW - 2, frameH - 2); // ç”»è¾¹æ¡†å°±æ˜¯é»‘è¾¹æ¡†
         Font font = new Font("Times New Roman", Font.BOLD, 20);
         g2.setFont(font);
     }
 
     /**
-     * »æÖÆÉÏÏÂÁ½ÌõºáÏß
+     * ç»˜åˆ¶ä¸Šä¸‹ä¸¤æ¡æ¨ªçº¿
      *
-     * @param size ĞèÒª»æÖÆÔªËØµÄ×ÜÊı
+     * @param size éœ€è¦ç»˜åˆ¶å…ƒç´ çš„æ€»æ•°
      */
     private static void drawRowLine(Graphics2D g2, int size) {
         g2.drawLine(FRAME_WIDTH, FRAME_HEIGHT, size * ELEMENT_FRAME_WIDTH + FRAME_WIDTH, FRAME_HEIGHT);
@@ -146,9 +146,9 @@ public class DrawImages {
     }
 
     /**
-     * »æÖÆÔªËØÖ®¼äµÄÊúÏß
+     * ç»˜åˆ¶å…ƒç´ ä¹‹é—´çš„ç«–çº¿
      *
-     * @param index ĞèÒª»æÖÆµÄÌõÊı£¨ÔªËØ×ÜÊı + 1£©
+     * @param index éœ€è¦ç»˜åˆ¶çš„æ¡æ•°ï¼ˆå…ƒç´ æ€»æ•° + 1ï¼‰
      */
     private static void drawColumnLine(Graphics2D g2, int index) {
         for (int i = 0; i < index; i++) {
