@@ -13,30 +13,30 @@ public class GifDemo {
         int width = 1000;
         int height = 800;
 
-        // µÃµ½Í¼Æ¬»º³åÇø
+        // å¾—åˆ°å›¾ç‰‡ç¼“å†²åŒº
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        // µÃµ½ËüµÄ»æÖÆ»·¾³(ÕâÕÅÍ¼Æ¬µÄ±Ê)
+        // å¾—åˆ°å®ƒçš„ç»˜åˆ¶ç¯å¢ƒ(è¿™å¼ å›¾ç‰‡çš„ç¬”)
         Graphics2D g2 = (Graphics2D) bi.getGraphics();
-        g2.setColor(Color.WHITE); // ÉèÖÃ±³¾°ÑÕÉ«
-        g2.fillRect(0, 0, width, height);// Ìî³äÕûÕÅÍ¼Æ¬(ÆäÊµ¾ÍÊÇÉèÖÃ±³¾°ÑÕÉ«)
-        g2.setColor(Color.black);// ÉèÖÃ×ÖÌåÑÕÉ«
-        g2.setStroke(new BasicStroke(2.0f)); // ±ß¿ò¼Ó´Ö
-        g2.drawRect(1, 1, width - 2, height - 2); // »­±ß¿ò¾ÍÊÇºÚ±ß¿ò
+        g2.setColor(Color.WHITE); // è®¾ç½®èƒŒæ™¯é¢œè‰²
+        g2.fillRect(0, 0, width, height);// å¡«å……æ•´å¼ å›¾ç‰‡(å…¶å®å°±æ˜¯è®¾ç½®èƒŒæ™¯é¢œè‰²)
+        g2.setColor(Color.black);// è®¾ç½®å­—ä½“é¢œè‰²
+        g2.setStroke(new BasicStroke(2.0f)); // è¾¹æ¡†åŠ ç²—
+        g2.drawRect(1, 1, width - 2, height - 2); // ç”»è¾¹æ¡†å°±æ˜¯é»‘è¾¹æ¡†
 
 
         BufferedImage image1 = ImageIO.read(new File(GifDemo.class.getResource("/1.png").getFile()));
         BufferedImage image2 = ImageIO.read(new File(GifDemo.class.getResource("/2.png").getFile()));
         BufferedImage image3 = ImageIO.read(new File(GifDemo.class.getResource("/3.png").getFile()));
         AnimatedGifEncoder e = new AnimatedGifEncoder();
-        // ÉèÖÃÉú³ÉÍ¼Æ¬´óĞ¡
+        // è®¾ç½®ç”Ÿæˆå›¾ç‰‡å¤§å°
         e.setSize(900, 1000);
-        //Éú³ÉµÄÍ¼Æ¬Â·¾¶
+        //ç”Ÿæˆçš„å›¾ç‰‡è·¯å¾„
         e.start(new FileOutputStream("./testgif.gif"));
-        //Í¼Æ¬Ö®¼ä¼ä¸ôÊ±¼ä
+        //å›¾ç‰‡ä¹‹é—´é—´éš”æ—¶é—´
         e.setDelay(500);
-        //ÖØ¸´´ÎÊı 0±íÊ¾ÎŞÏŞÖØ¸´ Ä¬ÈÏ²»ÖØ¸´
+        //é‡å¤æ¬¡æ•° 0è¡¨ç¤ºæ— é™é‡å¤ é»˜è®¤ä¸é‡å¤
         e.setRepeat(1);
-        //Ìí¼ÓÍ¼Æ¬
+        //æ·»åŠ å›¾ç‰‡
         e.addFrame(image1);
         e.addFrame(image2);
         e.addFrame(image3);

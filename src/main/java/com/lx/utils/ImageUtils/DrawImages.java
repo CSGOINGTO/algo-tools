@@ -34,17 +34,16 @@ public class DrawImages {
 
     public static void main(String[] args) throws IOException {
         List<Integer> list = new ArrayList<>();
-        list.add(1234);
-        list.add(245);
-        list.add(32);
-        list.add(1);
-        list.add(12345);
-        list.add(123456);
-        list.add(1234567);
-        list.add(12345678);
-        list.add(123456789);
-        list.add(1234567890);
-        DrawImages.draw(list, "1");
+        DrawImageManage<Integer> drawImageManage = new DrawImageManage<>();
+        drawImageManage.start();
+        for (int i = 0; i < 10; i++) {
+            list.add(i * 10);
+            drawImageManage.putList(new ArrayList<>(list));
+        }
+        if (drawImageManage.drawGIF()) {
+            drawImageManage.close();
+        }
+
 
 //        List<String> list1 = new ArrayList<>();
 //        list1.add("a");
@@ -63,7 +62,7 @@ public class DrawImages {
     /**
      * 绘制数组中的内容，并得到图片
      */
-    public static <T> void draw(List<T> list, String imageName) throws IOException {
+    public static <T> BufferedImage draw(List<T> list, String imageName) throws IOException {
 
         // 数组长度
         int size = list.size();
@@ -95,6 +94,7 @@ public class DrawImages {
 
         // 保存图片
         ImageIO.write(bi, "png", new FileOutputStream("./" + imageName + ".png"));
+        return bi;
     }
 
     /**
