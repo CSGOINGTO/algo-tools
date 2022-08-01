@@ -40,10 +40,6 @@ public class DrawImages {
             list.add(i * 10);
             drawImageManage.putList(new ArrayList<>(list));
         }
-        if (drawImageManage.drawGIF()) {
-            drawImageManage.close();
-        }
-
 
 //        List<String> list1 = new ArrayList<>();
 //        list1.add("a");
