@@ -1,5 +1,6 @@
-package com.lx.utils.ImageUtils;
+package com.lx.manage;
 
+import com.lx.utils.ImageUtils.DrawImages;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;
 
 import java.awt.image.BufferedImage;
@@ -12,7 +13,15 @@ import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 根据algoMethod执行，绘制每一步algo的图片，并根据每一步的图片绘制最终所要得到的GIF图片
+ * 1. 每个task都与唯一的一个algoMethod绑定
+ * 2. 每个task都与唯一的DrawImageListener绑定
+ * 3. 每个task中会有一个线程绘制每一步的algo图片，并绘制最终的GIF图片
+ */
 public class DrawImageTask<T> implements Runnable {
+
+    public volatile String algoMethodName;
 
     /**
      * 存放需要绘制Image的List

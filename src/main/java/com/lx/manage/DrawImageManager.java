@@ -1,10 +1,13 @@
-package com.lx.utils.ImageUtils;
+package com.lx.manage;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DrawImageManage<T> {
+/**
+ * DrawImageTask的管理器
+ */
+public class DrawImageManager<T> {
 
     private static ExecutorService executors = Executors.newSingleThreadExecutor((r) -> new Thread(r, "获取列表图片线程"));
 

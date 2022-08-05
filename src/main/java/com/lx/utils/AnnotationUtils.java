@@ -21,7 +21,7 @@ public class AnnotationUtils {
     /**
      * 所有的算法处理方法的列表
      */
-    public static final List<String> processMethodList = new ArrayList<>();
+    public final List<String> processMethodList = new ArrayList<>();
 
     /**
      * 所有的算法处理方法最终所要生成的Gif文件的参数
@@ -30,21 +30,34 @@ public class AnnotationUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationUtils.class);
 
-    private static final Set<Class<?>> annotationClassSet = new HashSet<>();
+    private final Set<Class<?>> annotationClassSet = new HashSet<>();
 
-    private static final Set<Class<?>> mainClassSet = new HashSet<>();
+    public final Set<Class<?>> mainClassSet = new HashSet<>();
+
+    private static AnnotationUtils ANNOTATION_UTILS;
+
+    public static AnnotationUtils getInstance() {
+        if (ANNOTATION_UTILS == null) {
+            synchronized (AnnotationUtils.class) {
+                if (ANNOTATION_UTILS == null) {
+                    ANNOTATION_UTILS = new AnnotationUtils();
+                }
+            }
+        }
+        return ANNOTATION_UTILS;
+    }
 
     /**
      * 加载AnnotationUtils
      */
-    public synchronized static void loadAnnotationsUtils(String annotationPackageName, String mainPackageName) {
-        AnnotationUtils.processAnnotation(annotationPackageName, mainPackageName);
+    public synchronized void loadAnnotations(String annotationPackageName, String mainPackageName) {
+        ANNOTATION_UTILS.processAnnotation(annotationPackageName, mainPackageName);
     }
 
     /**
      * 处理所有的注解
      */
-    private static void processAnnotation(String annotationPackageName, String mainPackageName) {
+    private void processAnnotation(String annotationPackageName, String mainPackageName) {
         // 1. 获取packageName中的所有的注解类
         findAnnotationClassByPackageName(annotationPackageName);
         // 2. 获取mainPackageName中的所有的处理类
@@ -72,7 +85,12 @@ public class AnnotationUtils {
         });
     }
 
-    private static GifParamBean getDefaultGifParam() {
+    /**
+     * 获取默认的GIF文件参数
+     *
+     * @return GIF文件参数对象
+     */
+    private GifParamBean getDefaultGifParam() {
         int delayTime = 0;
         String gifName = "";
         String gifFilePath = "";
@@ -97,7 +115,7 @@ public class AnnotationUtils {
      *
      * @param packageName 包路径，例如com/lx/annotations
      */
-    private static void findAnnotationClassByPackageName(String packageName) {
+    private void findAnnotationClassByPackageName(String packageName) {
         try {
             Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources(packageName);
             while (resources.hasMoreElements()) {
@@ -120,7 +138,7 @@ public class AnnotationUtils {
      * @param packageName 基础包名
      * @param packagePath 所要获取注解类的包路径
      */
-    private static void findAnnotationClassesInPackageByFile(String packageName, String packagePath) {
+    private void findAnnotationClassesInPackageByFile(String packageName, String packagePath) {
         File dir = new File(packagePath);
         if (!dir.exists() || !dir.isDirectory()) {
             return;
@@ -153,8 +171,9 @@ public class AnnotationUtils {
     }
 
     public static void main(String[] args) {
-        AnnotationUtils.loadAnnotationsUtils("com/lx/annotations", "com/lx/main");
-        System.out.println(processMethodList);
+        AnnotationUtils annotationUtils = AnnotationUtils.getInstance();
+        annotationUtils.loadAnnotations("com/lx/annotations", "com/lx/main");
+        System.out.println(annotationUtils.processMethodList);
         System.out.println(processMethodGifParamMap);
     }
 }

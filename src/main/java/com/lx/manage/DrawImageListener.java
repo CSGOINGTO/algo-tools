@@ -1,6 +1,4 @@
-package com.lx.utils.ImageUtils;
-
-import java.lang.reflect.Method;
+package com.lx.manage;
 
 /**
  * 功能：
@@ -8,6 +6,11 @@ import java.lang.reflect.Method;
  * 2. 实时监听本次绘制GIF的任务是否添加完成
  */
 public class DrawImageListener {
+
+    /**
+     * 本次所要监听的algoMethodName
+     */
+    public volatile String algoMethodName;
 
     /**
      * 本次绘制GIF的任务是否添加完成
@@ -18,6 +21,13 @@ public class DrawImageListener {
      * DrawImage的任务是否完成
      */
     public volatile boolean isTaskCompleted = false;
+
+    public DrawImageListener() {
+    }
+
+    public DrawImageListener(String algoMethodName) {
+        this.algoMethodName = algoMethodName;
+    }
 
     public void judgeTaskAddCompleted() {
         Runtime.getRuntime().traceMethodCalls(true);

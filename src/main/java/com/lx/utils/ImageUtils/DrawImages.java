@@ -1,5 +1,6 @@
 package com.lx.utils.ImageUtils;
 
+import com.lx.manage.DrawImageManager;
 import sun.font.FontDesignMetrics;
 
 import javax.imageio.ImageIO;
@@ -8,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DrawImages {
@@ -34,12 +36,14 @@ public class DrawImages {
 
     public static void main(String[] args) throws IOException {
         List<Integer> list = new ArrayList<>();
-        DrawImageManage<Integer> drawImageManage = new DrawImageManage<>();
-        drawImageManage.start();
+        DrawImageManager<Integer> drawImageManager = new DrawImageManager<>();
+        drawImageManager.start();
         for (int i = 0; i < 10; i++) {
             list.add(i * 10);
-            drawImageManage.putList(new ArrayList<>(list));
+            drawImageManager.putList(new ArrayList<>(list));
         }
+
+        Arrays.stream(Thread.currentThread().getStackTrace()).forEach(System.out::println);
 
 //        List<String> list1 = new ArrayList<>();
 //        list1.add("a");
