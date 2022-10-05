@@ -1,4 +1,4 @@
-package com.lx.manage;
+package com.lx.managers.image;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

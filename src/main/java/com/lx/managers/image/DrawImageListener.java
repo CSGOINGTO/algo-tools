@@ -1,4 +1,4 @@
-package com.lx.manage;
+package com.lx.managers.image;
 
 /**
  * 功能：

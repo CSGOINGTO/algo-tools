@@ -1,4 +1,4 @@
-package com.lx.manage;
+package com.lx.managers.image;
 
 import com.lx.utils.ImageUtils.DrawImages;
 import com.madgag.gif.fmsware.AnimatedGifEncoder;

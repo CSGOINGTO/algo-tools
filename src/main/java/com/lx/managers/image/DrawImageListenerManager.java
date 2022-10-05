@@ -1,6 +1,6 @@
-package com.lx.manage;
+package com.lx.managers.image;
 
-import com.lx.utils.AnnotationUtils;
+import com.lx.processors.annotation.AlgoMethodProcessor;
 
 import java.util.List;
 import java.util.Map;
@@ -35,9 +35,9 @@ public class DrawImageListenerManager {
 
     public DrawImageListenerManager() {
         // 加载AnnotationUtils获取所有的algoMethod
-        AnnotationUtils annotationUtils = AnnotationUtils.getInstance();
-        annotationUtils.loadAnnotations("com/lx/annotations", "com/lx/main");
-        allAlgoMethodList = annotationUtils.processMethodList;
+        AlgoMethodProcessor algoMethodProcessor = AlgoMethodProcessor.getInstance();
+        algoMethodProcessor.loadAnnotations("com/lx/annotations", "com/lx/main");
+        allAlgoMethodList = algoMethodProcessor.processMethodList;
     }
 
     public static DrawImageListenerManager getInstance() {

@@ -1,6 +1,6 @@
 package com.lx.utils.ImageUtils;
 
-import com.lx.manage.DrawImageManager;
+import com.lx.managers.image.DrawImageManager;
 import sun.font.FontDesignMetrics;
 
 import javax.imageio.ImageIO;
